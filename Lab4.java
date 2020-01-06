@@ -82,9 +82,44 @@ public class Lab4
 
     public static void combinePiles()
     {
-        //insert instructions below
+        while(Robot.onDark())
+        {
+            moveSquare();
+            returnLeftColumn();
+        }
+    }
 
-    
+    public static void returnLeftColumn()
+    //precondition: 
+    //postcondition: 
+    {
+        turnAround();
+        while(Robot.frontIsClear())
+        {
+            Robot.move();
+        }
+        turnRight();
+        Robot.move();
+        turnRight();
+        Robot.makeLight();
+        Robot.move();
+    }
+
+    public static void moveSquare()
+    //precondition: 
+    //postcondition: 
+    {
+        if(Robot.onDark())
+        {
+            turnRight();
+            Robot.move();
+            Robot.turnLeft();
+            while(Robot.onDark())
+            {
+                Robot.move();
+            }
+            Robot.makeDark();
+        }
     }
 
     public static void testCombinePiles1()
@@ -105,7 +140,6 @@ public class Lab4
     {
         //insert instructions below
 
-    
     }
 
     public static void testConnectDots1()
