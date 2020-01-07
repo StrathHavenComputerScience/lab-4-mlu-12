@@ -105,11 +105,11 @@ public class Lab4
         {
             while(Robot.frontIsClear())
             {   
-            Robot.move();
-            if(Robot.onDark())
-            {
-                return true;
-            }
+                Robot.move();
+                if(Robot.onDark())
+                {
+                    return true;
+                }
             }
             turnAround();
             while(Robot.frontIsClear())
@@ -120,19 +120,19 @@ public class Lab4
             return false;
         }
     }
-    
+
     public static void moveOneSquare()
-    //precondition: 
-    //postcondition: 
+    //precondition: Robot is standing in left column
+    //postcondition: Robot has moved a square to the right column and is ready to repeat
     {
         bottomSquare();
         darkenRightColumn();
         returnLeftColumn();
     }
-    
+
     public static void returnLeftColumn()
-    //precondition: 
-    //postcondition: 
+    //precondition: Robot has added one square to the right column
+    //postcondition: Robot has returned to the left column ready to move another
     {
         turnAround();
         while(Robot.frontIsClear())
@@ -145,30 +145,30 @@ public class Lab4
     }
 
     public static void bottomSquare()
-    //precondition: 
-    //postcondition: 
+    //precondition: Robot is in left column
+    //postcondition: Robot has made a square light and moved into the right column
     {
-     if(Robot.onDark())
+        if(Robot.onDark())
         {
-         Robot.makeLight();
+            Robot.makeLight();
         }
-     turnRight();
-     Robot.move();
-     Robot.turnLeft();
+        turnRight();
+        Robot.move();
+        Robot.turnLeft();
     }
-   
+
     public static void darkenRightColumn()
-    //precondition: 
-    //postcondition: 
+    //precondition: Robot is in right column
+    //postcondition: Robot has added a dark square to the top of the column
     {
-    while(Robot.onDark())
-          {
-              Robot.move();
-          }
-    Robot.makeDark();
+        while(Robot.onDark())
+        {
+            Robot.move();
+        }
+        Robot.makeDark();
     }
-   
-   public static void testCombinePiles1()
+
+    public static void testCombinePiles1()
     {
         Robot.load("piles1.txt");
         Robot.setDelay(0.025);
@@ -184,8 +184,167 @@ public class Lab4
 
     public static void connectDots()
     {
-        //insert instructions below
+        while(canConnectDot())
+        {
+            ConnectOneDot();
+        }
+    }
 
+    public static boolean canConnectDot()
+    //precondition: Robot may be able to connect to a dot
+    //postcondition: Robot knows if it can connect to a dot 
+    {
+        if(isDotAhead())
+        {
+            return true;
+        }
+        else
+        {
+            if(isDotOnLeft())
+            {
+                return true;
+            }
+            else
+            {
+                if(isDotOnRight())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public static void ConnectOneDot()
+    //precondition: Robot is standing on a dot
+    //postcondition: Robot has connected to a dot ahead, to its left, or to its right, or done nothing
+    {
+        ifDotAhead();
+        ifDotOnLeft();
+        ifDotOnRight();
+    }
+
+    public static void ifDotOnRight()
+    //precondition: Robot might have a dot to its right (relative to original direction)
+    //postcondition: Robot has either connected the dot ahead or done nothing
+    {
+        if(isDotOnRight())
+        {
+            Robot.move();
+            Robot.makeDark();
+            Robot.move();
+        }
+    }
+
+    public static void ifDotAhead()
+    //precondition: Robot might have a dot ahead
+    //postcondition: Robot has either connected the dot ahead or done nothing
+    {
+        if(isDotAhead())
+        {
+            Robot.move();
+            Robot.makeDark();
+            Robot.move();
+        }
+    }
+
+    public static void ifDotOnLeft()
+    //precondition: Robot might have a dot to its left (relative to original direction)
+    //postcondition: Robot has either connected the dot to its left or done nothing
+    {
+        if(isDotOnLeft())
+        {
+            Robot.move();
+            Robot.makeDark();
+            Robot.move();
+        }
+    }
+
+    public static boolean isDotOnRight()
+    //precondition: Robot may have an unconnected dot to its right (relative to original direction)
+    //postcondition: Robot knows if there is an unconnected dot to its right
+    {
+        turnAround();
+        Robot.move();
+        if(Robot.onDark())
+        {
+            turnAround();
+            Robot.move();
+            return false;
+        }
+        else
+        {
+            Robot.move();
+            if(Robot.onDark())
+            {
+                returnPosition();
+                return true;
+            }
+            returnPosition();
+            return false;
+        }
+    }
+
+    public static boolean isDotOnLeft()
+    //precondition: Robot may have an unconnected dot to its left (relative to original direction)
+    //postcondition: Robot knows if there is an unconnected dot to its left
+    {
+        Robot.turnLeft();
+        Robot.move();
+        if(Robot.onDark())
+        {
+            turnAround();
+            Robot.move();
+            return false;
+        }
+        else
+        {
+            Robot.move();
+            if(Robot.onDark())
+            {
+                returnPosition();
+                return true;
+            }
+            returnPosition();
+            return false;
+        }
+    }
+
+    public static boolean isDotAhead()
+    //precondition: Robot may have an unconnected dot ahead of it
+    //postcondition: Robot knows if there is an unconncted dot ahead of it
+    {
+        Robot.move();
+        if(Robot.onDark())
+        {
+            turnAround();
+            Robot.move();
+            return false;
+        }
+        else
+        {
+            Robot.move();
+            if(Robot.onDark())
+            {
+                returnPosition();
+                return true;
+            }
+            returnPosition();
+            return false;
+        }
+    }
+
+    public static void returnPosition()
+    //precondition: Robot has moved 2 squares forward in its original direction
+    //postcondition: Robot has returned to the previous position in the previous direction
+    {
+        turnAround();
+        Robot.move();
+        Robot.move();
+        turnAround();
     }
 
     public static void testConnectDots1()
