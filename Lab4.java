@@ -1,3 +1,4 @@
+
 public class Lab4
 {
     public static void turnRight()
@@ -82,13 +83,53 @@ public class Lab4
 
     public static void combinePiles()
     {
-        while(Robot.onDark())
+        while(isfrontDark())
         {
-            moveSquare();
-            returnLeftColumn();
+            moveOneSquare();
+            if(!Robot.onDark())
+            {
+                Robot.move();
+            }
         }
     }
 
+    public static boolean isfrontDark()
+    //precondition: Robot may be standing on a dark square (if there is a dark square in front)
+    //postcondition: Robot knows if it is standing on a dark spot or not
+    {
+        if(Robot.onDark())
+        {
+            return true;
+        }
+        else
+        {
+            while(Robot.frontIsClear())
+            {   
+            Robot.move();
+            if(Robot.onDark())
+            {
+                return true;
+            }
+            }
+            turnAround();
+            while(Robot.frontIsClear())
+            {
+                Robot.move();
+            }
+            turnAround();
+            return false;
+        }
+    }
+    
+    public static void moveOneSquare()
+    //precondition: 
+    //postcondition: 
+    {
+        bottomSquare();
+        darkenRightColumn();
+        returnLeftColumn();
+    }
+    
     public static void returnLeftColumn()
     //precondition: 
     //postcondition: 
@@ -101,28 +142,33 @@ public class Lab4
         turnRight();
         Robot.move();
         turnRight();
-        Robot.makeLight();
-        Robot.move();
     }
 
-    public static void moveSquare()
+    public static void bottomSquare()
     //precondition: 
     //postcondition: 
     {
-        if(Robot.onDark())
+     if(Robot.onDark())
         {
-            turnRight();
-            Robot.move();
-            Robot.turnLeft();
-            while(Robot.onDark())
-            {
-                Robot.move();
-            }
-            Robot.makeDark();
+         Robot.makeLight();
         }
+     turnRight();
+     Robot.move();
+     Robot.turnLeft();
     }
-
-    public static void testCombinePiles1()
+   
+    public static void darkenRightColumn()
+    //precondition: 
+    //postcondition: 
+    {
+    while(Robot.onDark())
+          {
+              Robot.move();
+          }
+    Robot.makeDark();
+    }
+   
+   public static void testCombinePiles1()
     {
         Robot.load("piles1.txt");
         Robot.setDelay(0.025);
